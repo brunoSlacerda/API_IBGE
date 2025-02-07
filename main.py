@@ -3,12 +3,27 @@ import pandas as pd
 
 
 
-def defineUrl(escolha, nome = None):
+def defineUrl(escolha, nome = None, decada= None, localidade = None, sexo = None):
+    baseUrl = 'https://servicodados.ibge.gov.br/api/v2/censos/nomes/'
+
     if escolha == '1':
-        url = 'https://servicodados.ibge.gov.br/api/v2/censos/nomes/ranking'
+        url = f'{baseUrl}ranking'
+        params = {}
+        if decada:
+            params['decada'] = decada
+
+        if localidade:
+            params['localidade'] = localidade   
+
+        if sexo:
+            params["sexo"] = sexo
+    
     elif escolha == '2':
         url = f'https://servicodados.ibge.gov.br/api/v2/censos/nomes/{nome}'
-    return url
+        params = {}
+    
+    return url, params
+
 def main():
     escolha = ''
     while escolha != '1' and escolha != '2':
@@ -17,12 +32,19 @@ def main():
         print('Opção 1 - Ver um ranking de nomes no geral')
         print('Opção 2 - Escolher um nome específico por década')
         escolha = input("Informe a opção desejada: ")
+        
         if escolha == '2':
             nome = input("Informe o nome que deseja procurar: ")
-        else: 
+
+        elif escolha == '1':
+            decada = input("Informe uma decada específica para procurar (OPCIONAL): ")
+            localidade = input("Informe uma localidade específica para procurar (OPCIONAL): ")
+            sexo = input("Informe um sexo para procurar (M ou F)(OPCIONAL): ") 
             nome = None
 
-    response = requests.request(method='GET',url=defineUrl(escolha,nome))
+    url, params = defineUrl(escolha,nome,decada,localidade,sexo)
+
+    response = requests.request(method='GET',url=url, params=params)
     tabela = response.json()[0]['res']
     df = pd.DataFrame(tabela)
     print(df)
