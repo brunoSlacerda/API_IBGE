@@ -21,6 +21,12 @@ def defineUrl(escolha, nome = None, decada= None, localidade = None, sexo = None
     elif escolha == '2':
         url = f'https://servicodados.ibge.gov.br/api/v2/censos/nomes/{nome}'
         params = {}
+
+        if localidade:
+            params['localidade'] = localidade   
+
+        if sexo:
+            params["sexo"] = sexo
     
     return url, params
 
@@ -35,6 +41,9 @@ def main():
         
         if escolha == '2':
             nome = input("Informe o nome que deseja procurar: ")
+            localidade = input("Informe uma localidade específica para procurar (OPCIONAL): ")
+            sexo = input("Informe um sexo para procurar (M ou F)(OPCIONAL): ") 
+            decada = None
 
         elif escolha == '1':
             decada = input("Informe uma decada específica para procurar (OPCIONAL): ")
