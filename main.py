@@ -52,11 +52,14 @@ def main():
             nome = None
 
     url, params = defineUrl(escolha,nome,decada,localidade,sexo)
-
-    response = requests.request(method='GET',url=url, params=params)
-    tabela = response.json()[0]['res']
-    df = pd.DataFrame(tabela)
-    print(df)
+    
+    try:    
+        response = requests.request(method='GET',url=url, params=params)
+        tabela = response.json()[0]['res']
+        df = pd.DataFrame(tabela)
+        print(df)
+    except requests.exceptions.RequestException as e:
+        print(f"Erro na requisição: {e}")
 
 if __name__ == "__main__":
     main()
