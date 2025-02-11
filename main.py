@@ -75,6 +75,12 @@ def main():
         tabela = response.json()[0]['res']
         df = pd.DataFrame(tabela)
         display_data(df)
+        if escolha == '1':
+            export = input("Deseja exportar os dados para um arquivo CSV? (S/N): ").upper()
+            if export == 'S':
+                    df.to_csv('dados_ibge.csv', index=False)
+                    print("Dados exportados com sucesso para 'dados_ibge.csv'.")
+                    input()
         
     except requests.exceptions.RequestException as e:
         print(f"Erro na requisição: {e}")
